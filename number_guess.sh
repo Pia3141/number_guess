@@ -9,6 +9,10 @@ ADD_USER(){
   INSERT_USER_RESULT="$($PSQL "INSERT INTO users(name) VALUES ('$USERNAME')")"
 }
 
+ADD_GAME(){
+  INSERT_GAME_RESULT="$($PSQL "INSERT INTO games(user_id, guesses) VALUES ($GET_USER_ID, $TRIES)")"
+}
+
 GUESS(){
 
   if [[ -n $1 ]]
@@ -52,7 +56,7 @@ GET_USER_ID=$($PSQL "SELECT user_id FROM users WHERE name='$USERNAME'")
 
   echo -e "\nGuess the secret number between 1 and 1000:"
   GUESS
- 
+  ADD_GAME
 
 }
 
