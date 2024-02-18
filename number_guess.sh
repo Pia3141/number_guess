@@ -7,6 +7,8 @@ TRIES=0
 
 ADD_USER(){
   INSERT_USER_RESULT="$($PSQL "INSERT INTO users(name) VALUES ('$USERNAME')")"
+  GET_USER_ID=$($PSQL "SELECT user_id FROM users WHERE name='$USERNAME'")
+
 }
 
 ADD_GAME(){
@@ -34,6 +36,7 @@ GUESS(){
     TRIES=$((TRIES+1))
     GUESS "It's lower than that, guess again:"
   else 
+   TRIES=$((TRIES+1))
    echo -e "\nYou guessed it in $TRIES tries. The secret number was $RANDOM_NUMBER. Nice job!"
   fi
   
