@@ -15,6 +15,14 @@ ADD_GAME(){
   INSERT_GAME_RESULT="$($PSQL "INSERT INTO games(user_id, guesses) VALUES ($GET_USER_ID, $TRIES)")"
 }
 
+USER_STATS(){
+  NUMBER_GAMES_PLAYED=$($PSQL "SELECT COUNT(*) FROM games WHERE user_id=$GET_USER_ID GROUP BY user_id")
+  BEST_GAME_PLAYED=$($PSQL "SELECT MIN(guesses) FROM games WHERE user_id=$GET_USER_ID")
+  
+  echo -e "\nWelcome back, $USERNAME! You have played $NUMBER_GAMES_PLAYED games, and your best game took $BEST_GAME_PLAYED guesses."
+
+}
+
 GUESS(){
 
   if [[ -n $1 ]]
@@ -54,7 +62,7 @@ GET_USER_ID=$($PSQL "SELECT user_id FROM users WHERE name='$USERNAME'")
     ADD_USER
     echo "Welcome, $USERNAME! It looks like this is your first time here."
   else
-    echo "Welcome back, $USERNAME! You have played games, and your best game took guesses."
+    USER_STATS
   fi
 
   echo -e "\nGuess the secret number between 1 and 1000:"
